@@ -31,6 +31,7 @@ class ModeManager:
         self.player_name: str = player_name
         self.mode_list: list[BaseMode] = mode_list
         self.current_mode: BaseMode | None = None
+        self.exit_index: int = len(mode_list) + 1
 
     def show_menu(self) -> None:
         print(f"\nHello {self.player_name}. Welcome to Bro Code Exercises!")
@@ -38,7 +39,11 @@ class ModeManager:
 
         print("\nAvailable modes:")
         self.__generate_choices()
-        choice: int = get_non_empty_int_range_input("Enter choice: ", 1, len(self.mode_list))
+        choice: int = get_non_empty_int_range_input("Enter choice: ", 1, len(self.mode_list) + 1)
+
+        if choice == self.exit_index:
+            exit(0)
+
         self.current_mode = self.mode_list[choice -1]
         self.play_mode()
 
@@ -52,3 +57,4 @@ class ModeManager:
     def __generate_choices(self) -> None:
         for index, mode in enumerate(self.mode_list):
             print(f"\t{index + 1}. {mode.mode_name()}")
+        print(f"\t{self.exit_index}. Quit")
