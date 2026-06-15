@@ -1,3 +1,5 @@
+import os
+import re
 
 def get_int_input(query: str) -> int:
     while True:
@@ -36,6 +38,15 @@ def get_non_empty_int_range_input(query: str, start: int, end: int) -> int:
         except ValueError:
             print("Please enter a valid number")
 
+def get_non_empty_equation_input(query: str) -> str:
+    while True:
+        valid_equation: str = r"^[0-9+\-*/()\s]+$"
+        user_input: str = input(query)
+        if re.match(valid_equation, user_input):
+            return user_input
+        else :
+            print("Please enter a valid equation")
+
 def get_non_empty_word_input(query: str) -> str:
     while True:
         user_input: str = input(query)
@@ -53,4 +64,4 @@ def get_non_empty_str_input(query: str) -> str:
             return user_input
 
 def clear_console():
-    pass
+    os.system('cls' if os.name == 'nt' else 'clear')

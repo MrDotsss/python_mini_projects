@@ -19,7 +19,7 @@ class BaseMode(ABC):
         pass
 
     @abstractmethod
-    def instructions(self) -> str:
+    def instructions(self) -> None:
         pass
 
     @abstractmethod
@@ -34,8 +34,9 @@ class ModeManager:
         self.exit_index: int = len(mode_list) + 1
 
     def show_menu(self) -> None:
+        clear_console()
         print(f"\nHello {self.player_name}. Welcome to Bro Code Exercises!")
-        print("This came from 12 hour Python Course from BroCode for FREE")
+        print("This is based from 12 hour Python Course from BroCode for FREE (with my own implementations).")
 
         print("\nAvailable modes:")
         self.__generate_choices()
@@ -49,6 +50,7 @@ class ModeManager:
 
     def play_mode(self) -> None:
         if self.current_mode is not None:
+            clear_console()
             self.current_mode.start(self)
 
     def exit_mode(self) -> None:
@@ -57,4 +59,4 @@ class ModeManager:
     def __generate_choices(self) -> None:
         for index, mode in enumerate(self.mode_list):
             print(f"\t{index + 1}. {mode.mode_name()}")
-        print(f"\t{self.exit_index}. Quit")
+        print(f"\t{self.exit_index}. Quit\n")
