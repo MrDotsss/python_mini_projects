@@ -25,8 +25,8 @@ class SimpleCalculator (BaseMode):
 
             try:
                 clear_console()
-                print(f"{self.equation} = {eval(self.equation)}")
-            except (SyntaxError, NameError, ZeroDivisionError, TypeError) as e:
+                print(f"{self.equation} = {round(float(eval(self.equation)), 2)}")
+            except (SyntaxError, NameError, ZeroDivisionError, TypeError) as _:
                 print(f"Invalid equation")
 
             print("\ntype 7848 to EXIT the calculator and return to main menu")

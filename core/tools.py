@@ -40,7 +40,7 @@ def get_non_empty_int_range_input(query: str, start: int, end: int) -> int:
 
 def get_non_empty_equation_input(query: str) -> str:
     while True:
-        valid_equation: str = r"^[0-9+\-*/()\s]+$"
+        valid_equation: str = r"^[.0-9+\-*/()\s]+$"
         user_input: str = input(query)
         if re.match(valid_equation, user_input):
             return user_input
@@ -62,6 +62,34 @@ def get_non_empty_str_input(query: str) -> str:
             print("You entered an empty value. Try again")
         else:
             return user_input
+
+def get_non_empty_unit_input(query: str, unit_dictionary: dict) -> tuple[float, str] | None:
+    pattern = re.compile(r"^\s*(-?\d+(?:\.\d+)?)\s*([a-zA-Z]+)\s*$")
+
+    print(f"Valid units: {', '.join(unit_dictionary)}")
+    while True:
+        user_input = input(query)
+
+        if not user_input.strip():
+            print("You entered an empty value. Try again")
+            continue
+
+        match = pattern.match(user_input)
+
+        if not match:
+            print("Expected format: <number><unit> (e.g. 10kg or 10 kg)")
+            continue
+
+        value_str, unit = match.groups()
+
+        value = float(value_str)
+        unit = unit.lower()
+
+        if unit not in unit_dictionary:
+            print(f"Unknown unit. Valid units: {', '.join(unit_dictionary)}")
+            continue
+
+        return value, unit
 
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
