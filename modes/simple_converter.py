@@ -22,12 +22,18 @@ CONVERSIONS: Final[dict] = {
         "mg": 0.000001,
         "lb": 0.45359237,
         "oz": 0.02834952
+    },
+    "temperature": {
+        "c": {"scale": 1.0, "offset": 0.0},
+        "f": {"scale": 5 / 9, "offset": -32},
+        "k": {"scale": 1.0, "offset": -273.15},
     }
 }
 
 class Category(Enum):
     LENGTH = "length"
     WEIGHT = "weight"
+    TEMPERATURE = "temperature"
 
 class SimpleConverter(BaseMode):
     def __init__(self):
@@ -36,7 +42,7 @@ class SimpleConverter(BaseMode):
         self.current_unit: str = ""
         self.current_value: float = 0.0
         self.converting_unit: str = ""
-        self.category_dict: dict[str, float] | None = None
+        self.category_dict: dict | None = None
 
     def mode_name(self) -> str:
         return "Simple Converter"
@@ -47,11 +53,22 @@ class SimpleConverter(BaseMode):
         self.instructions()
 
         print("\nSelect Category:")
-        print("\t1. Length\n\t2. Weight\n")
-        value: int = get_non_empty_int_range_input("Enter option (number): ", 1, 2)
+        print("\t1. Length\n\t2. Weight\n\t3. Temperature\n\t4. Exit")
+        value: int = get_non_empty_int_range_input("Enter option (number): ", 1, 4)
 
-        self.current_category: Category = Category.LENGTH if value == 1 else Category.WEIGHT
-        self.category_dict: dict[str, float] = CONVERSIONS[self.current_category.value].copy()
+        if value == 4:
+            self.on_exit()
+            return
+
+        match value:
+            case 1:
+                self.current_category: Category = Category.LENGTH
+            case 2:
+                self.current_category: Category = Category.WEIGHT
+            case 3:
+                self.current_category: Category = Category.TEMPERATURE
+
+        self.category_dict: dict = CONVERSIONS[self.current_category.value].copy()
 
         self.current_value, self.current_unit = get_non_empty_unit_input("\nEnter value with unit (e.g. 1m): ", self.category_dict)
 
@@ -69,8 +86,14 @@ class SimpleConverter(BaseMode):
             print(f"An error occurred: UNKNOWN unit. Valid units: {', '.join(self.category_dict)}")
             self.on_exit()
 
-        base_value: float = self.current_value * self.category_dict[self.converting_unit]
-        print(f"{self.current_value}{self.current_unit} => {base_value}{self.converting_unit}")
+        is_temp: bool = self.current_category.value == "temperature"
+
+        if is_temp:
+            temp: float = self.__convert_to_temp()
+            print(f"Temperature: {self.current_value}{self.converting_unit} => {temp}{self.converting_unit}")
+        else:
+            base_value: float = self.current_value * self.category_dict[self.converting_unit]
+            print(f"{self.current_value}{self.current_unit} => {round(base_value, 2)}{self.converting_unit}")
 
         query: str = get_non_empty_str_input("Would you like to convert again? Y/N\n")
         while query.lower() != "y" and query.lower() != "n":
@@ -78,6 +101,20 @@ class SimpleConverter(BaseMode):
             query: str = get_non_empty_str_input("Would you like to convert again? Y/N\n")
 
         self.start(self.mode_manager) if query.lower() == 'y' else self.on_exit()
+
+    def __convert_to_temp(self) -> float:
+        temp_dict: dict = CONVERSIONS[self.current_category.value].copy()
+
+        if self.converting_unit not in temp_dict:
+            print(f"An error occurred: UNKNOWN unit. Valid units: {', '.join(temp_dict)}")
+            self.on_exit()
+
+        current: dict = temp_dict[self.current_unit]
+        c: float = (self.current_value + current["offset"]) * current["scale"]
+
+        target: dict = temp_dict[self.converting_unit]
+
+        return round((c / target["scale"]) - target["offset"], 2)
 
     def instructions(self) -> None:
         print(f"\tHi {self.mode_manager.player_name}. Welcome to Simple Converter!")
