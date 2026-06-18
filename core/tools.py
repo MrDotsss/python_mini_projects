@@ -22,6 +22,18 @@ def get_non_empty_int_input(query: str) -> int:
         except ValueError:
             print("Please enter a valid number")
 
+def get_non_empty_float_input(query: str) -> float:
+    while True:
+        user_input: str = input(query)
+        try:
+            if not user_input.strip():
+                print("You entered an empty value. Try again")
+            else:
+                value: float = float(user_input)
+                return value
+        except ValueError:
+            print("Please enter a valid number")
+
 def get_non_empty_int_range_input(query: str, start: int, end: int) -> int:
     while True:
         user_input: str = input(query)

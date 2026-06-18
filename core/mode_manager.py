@@ -1,6 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from core.tools import *
+from core.tools import clear_console, get_non_empty_int_range_input
 
 class BaseMode(ABC):
     def __init__(self) -> None:

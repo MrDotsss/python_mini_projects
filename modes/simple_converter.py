@@ -90,10 +90,10 @@ class SimpleConverter(BaseMode):
 
         if is_temp:
             temp: float = self.__convert_to_temp()
-            print(f"Temperature: {self.current_value}{self.converting_unit} => {temp}{self.converting_unit}")
+            print(f"Temperature: {self.current_value}{self.converting_unit} => {temp:,.2f}{self.converting_unit}")
         else:
             base_value: float = self.current_value * self.category_dict[self.converting_unit]
-            print(f"{self.current_value}{self.current_unit} => {round(base_value, 2)}{self.converting_unit}")
+            print(f"{self.current_value}{self.current_unit} => {base_value:,.2f}{self.converting_unit}")
 
         query: str = get_non_empty_str_input("Would you like to convert again? Y/N\n")
         while query.lower() != "y" and query.lower() != "n":
@@ -114,7 +114,7 @@ class SimpleConverter(BaseMode):
 
         target: dict = temp_dict[self.converting_unit]
 
-        return round((c / target["scale"]) - target["offset"], 2)
+        return (c / target["scale"]) - target["offset"]
 
     def instructions(self) -> None:
         print(f"\tHi {self.mode_manager.player_name}. Welcome to Simple Converter!")

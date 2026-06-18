@@ -1,5 +1,5 @@
-from core.mode_manager import *
-from core.tools import *
+from core.mode_manager import BaseMode, ModeManager
+from core.tools import clear_console, get_non_empty_word_input, get_non_empty_int_input
 
 # Madlibs game
 # word game where you create a story

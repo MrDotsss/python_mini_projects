@@ -25,7 +25,7 @@ class SimpleCalculator (BaseMode):
 
             try:
                 clear_console()
-                print(f"{self.equation} = {round(float(eval(self.equation)), 2)}")
+                print(f"{self.equation} = {float(eval(self.equation)):,.2f}")
             except (SyntaxError, NameError, ZeroDivisionError, TypeError) as _:
                 print(f"Invalid equation")
 
