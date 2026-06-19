@@ -25,14 +25,22 @@ class SimpleCalculator (BaseMode):
 
             try:
                 clear_console()
-                print(f"{self.equation} = {float(eval(self.equation)):,.2f}")
+                if self.equation == "123":
+                    self.build()
+                else:
+                    print(f"{self.equation} = {float(eval(self.equation)):,.2f}")
             except (SyntaxError, NameError, ZeroDivisionError, TypeError) as _:
                 print(f"Invalid equation")
 
             print("\ntype 7848 to EXIT the calculator and return to main menu")
 
     def build(self) -> None:
-        pass
+        numpad: tuple = ((7, 8, 9), (4, 5, 6), (3, 2, 1), ("*", 0, "#"))
+
+        for row in numpad:
+            for col in row:
+                print(col, end=" ")
+            print()
 
     def instructions(self) -> None:
         print(f"\tHi {self.mode_manager.player_name}. Welcome to Simple Calculator!")
