@@ -1,7 +1,7 @@
 import time
 
 from core.mode_manager import ModeManager, BaseMode
-from core.tools import clear_console, get_non_empty_str_input
+from core.tools import clear_console, get_non_empty_str_input, yes_no_query_invoker
 
 
 class QuizGame(BaseMode):
@@ -94,12 +94,11 @@ class QuizGame(BaseMode):
 
         print()
         time.sleep(1)
-        query: str = get_non_empty_str_input("Would you like to try again? Y/N\n")
-        while query.lower() != "y" and query.lower() != "n":
-            print("\n\tPlease enter Y or N.\n")
-            query: str = get_non_empty_str_input("Would you like to try again? Y/N\n")
 
-        self.start(self.mode_manager) if query.lower() == 'y' else self.on_exit()
+        def on_start() -> None:
+            self.start(self.mode_manager)
+
+        yes_no_query_invoker("Would you like to try again?", on_start, self.on_exit)
 
     def __get_score_comment(self) -> str:
         if self.current_score == 5:

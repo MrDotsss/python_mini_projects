@@ -1,5 +1,6 @@
 from core.mode_manager import BaseMode, ModeManager
-from core.tools import clear_console, get_non_empty_float_input, get_non_empty_int_input, get_non_empty_str_input
+from core.tools import clear_console, get_non_empty_float_input, get_non_empty_int_input, get_non_empty_str_input, \
+    yes_no_query_invoker
 
 
 class CompoundInterestCalculator(BaseMode):
@@ -36,8 +37,6 @@ class CompoundInterestCalculator(BaseMode):
 
         self.build()
 
-
-
     def build(self) -> None:
         clear_console()
         print(f"Principal: ${self.principal_balance:,}")
@@ -48,12 +47,10 @@ class CompoundInterestCalculator(BaseMode):
 
         print(f"\nFinal Amount: $1{self.final_amount:,.2f} after {self.period} years.")
 
-        query: str = get_non_empty_str_input("Would you like to calculate again? Y/N\n")
-        while query.lower() != "y" and query.lower() != "n":
-            print("\n\tPlease enter Y or N.\n")
-            query: str = get_non_empty_str_input("Would you like to calculate again? Y/N\n")
+        def on_start() -> None:
+            self.start(self.mode_manager)
 
-        self.start(self.mode_manager) if query.lower() == 'y' else self.on_exit()
+        yes_no_query_invoker("Would you like to calculate again?", on_start, self.on_exit)
 
     def instructions(self) -> None:
         print(f"\tHi {self.mode_manager.player_name}. Welcome to Compound Interest Calculator!")

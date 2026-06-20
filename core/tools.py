@@ -1,5 +1,6 @@
 import os
 import re
+from typing import Callable
 
 def get_int_input(query: str) -> int:
     while True:
@@ -102,6 +103,14 @@ def get_non_empty_unit_input(query: str, unit_dictionary: dict) -> tuple[float, 
             continue
 
         return value, unit
+
+def yes_no_query_invoker(query: str, func_yes: Callable[[], None], func_no: Callable[[], None]) -> None:
+    q: str = get_non_empty_str_input(f"{query} Y/N: ")
+    while q.lower() != "y" and q.lower() != "n":
+        print("\n\tPlease enter Y or N.\n")
+        q: str = get_non_empty_str_input(f"{query} Y/N: ")
+
+    func_yes() if q.lower() == "y" else func_no()
 
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')

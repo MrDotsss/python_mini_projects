@@ -1,4 +1,5 @@
 from core.mode_manager import ModeManager
+from modes.concession_stand import ConcessionStand
 from modes.countdown_timer import CountdownTimer
 from modes.madlibs import MadlibsGame
 from modes.quiz_game import QuizGame
@@ -17,7 +18,8 @@ def main() -> None:
         CompoundInterestCalculator(),
         CountdownTimer(),
         ShoppingCart(),
-        QuizGame()
+        QuizGame(),
+        ConcessionStand(),
     ])
     mode_manager.show_menu()
 

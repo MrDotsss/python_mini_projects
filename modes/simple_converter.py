@@ -3,7 +3,8 @@ from typing import Final
 from core.mode_manager import BaseMode, ModeManager
 from enum import Enum
 
-from core.tools import clear_console, get_non_empty_unit_input, get_non_empty_str_input, get_non_empty_int_range_input
+from core.tools import clear_console, get_non_empty_unit_input, get_non_empty_str_input, get_non_empty_int_range_input, \
+    yes_no_query_invoker
 
 CONVERSIONS: Final[dict] = {
     "length": {
@@ -95,12 +96,10 @@ class SimpleConverter(BaseMode):
             base_value: float = self.current_value * self.category_dict[self.converting_unit]
             print(f"{self.current_value}{self.current_unit} => {base_value:,.2f}{self.converting_unit}")
 
-        query: str = get_non_empty_str_input("Would you like to convert again? Y/N\n")
-        while query.lower() != "y" and query.lower() != "n":
-            print("\n\tPlease enter Y or N.\n")
-            query: str = get_non_empty_str_input("Would you like to convert again? Y/N\n")
+        def on_start() -> None:
+            self.start(self.mode_manager)
 
-        self.start(self.mode_manager) if query.lower() == 'y' else self.on_exit()
+        yes_no_query_invoker("Would you like to convert again?", on_start, self.on_exit)
 
     def __convert_to_temp(self) -> float:
         temp_dict: dict = CONVERSIONS[self.current_category.value].copy()

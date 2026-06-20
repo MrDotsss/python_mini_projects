@@ -3,7 +3,7 @@ import time
 
 from core.mode_manager import ModeManager, BaseMode
 from core.tools import clear_console, get_non_empty_int_range_input, get_non_empty_word_input, \
-    get_non_empty_float_input, get_non_empty_int_input, get_non_empty_str_input
+    get_non_empty_float_input, get_non_empty_int_input, get_non_empty_str_input, yes_no_query_invoker
 
 
 class ShoppingItem:
@@ -138,20 +138,19 @@ class ShoppingCart(BaseMode):
 
         item: ShoppingItem = self.items[choice - 1]
         print(f"Item to delete: {item}")
-        query: str = get_non_empty_str_input("Proceed? Y/N\n")
-        while query.lower() != "y" and query.lower() != "n":
-            print("\n\tPlease enter Y or N.\n")
-            query: str = get_non_empty_str_input("Proceed? Y/N\n")
 
-        if query.lower() == "y":
+        def on_delete() -> None:
             del_item: ShoppingItem = self.items.pop(choice - 1)
             print(f"Item {del_item.item_name} deleted from cart.")
             time.sleep(1)
             clear_console()
             self.__main_menu()
-        else:
+
+        def on_cancel() -> None:
             clear_console()
             self.__delete_cart()
+
+        yes_no_query_invoker("Proceed", on_delete, on_cancel)
 
     def __checkout(self):
         if len(self.items) == 0:
@@ -171,16 +170,19 @@ class ShoppingCart(BaseMode):
             print("\n\tPlease enter Y or N.\n")
             query: str = get_non_empty_str_input("Proceed? Y/N\n")
 
-        if query.lower() == "y":
+        def on_checkout() -> None:
             print(f"Checked out {len(self.items) + 1} items in total of {total:,.2f}.")
             print(f"Thank you for shopping with us.")
             self.items.clear()
             time.sleep(3)
             clear_console()
             self.__main_menu()
-        else:
+
+        def on_cancel() -> None:
             clear_console()
             self.__main_menu()
+
+        yes_no_query_invoker("Proceed to checkout?", on_checkout, on_cancel)
 
 
     def instructions(self) -> None:
