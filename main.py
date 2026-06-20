@@ -1,6 +1,7 @@
 from core.mode_manager import ModeManager
 from modes.countdown_timer import CountdownTimer
 from modes.madlibs import MadlibsGame
+from modes.quiz_game import QuizGame
 from modes.shopping_cart import ShoppingCart
 from modes.simple_calculator import SimpleCalculator
 from modes.simple_converter import SimpleConverter
@@ -15,7 +16,8 @@ def main() -> None:
         SimpleConverter(),
         CompoundInterestCalculator(),
         CountdownTimer(),
-        ShoppingCart()
+        ShoppingCart(),
+        QuizGame()
     ])
     mode_manager.show_menu()
 
