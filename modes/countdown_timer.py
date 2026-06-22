@@ -41,7 +41,7 @@ class CountdownTimer(BaseMode):
         yes_no_query_invoker("Would you like to try again?", on_start, self.on_exit)
 
     def instructions(self) -> None:
-        print(f"\tHi {self.mode_manager.player_name}. Welcome to Countdown Timer!")
+        print(f"\tHi {self.player_name}. Welcome to Countdown Timer!")
         print("A simple countdown timer.\n")
 
     def on_exit(self) -> None:

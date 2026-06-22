@@ -9,6 +9,7 @@ from modes.shopping_cart import ShoppingCart
 from modes.simple_calculator import SimpleCalculator
 from modes.simple_converter import SimpleConverter
 from modes.compound_interest_calculator import CompoundInterestCalculator
+from modes.dice_roller import LuckDiceRoller
 from core.tools import get_non_empty_word_input
 
 def main() -> None:
@@ -23,7 +24,8 @@ def main() -> None:
         QuizGame(),
         ConcessionStand(),
         NumberGuessingGame(),
-        RockPaperScissorsMode()
+        RockPaperScissorsMode(),
+        LuckDiceRoller(),
     ])
     mode_manager.show_menu()
 

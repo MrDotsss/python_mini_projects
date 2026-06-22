@@ -109,7 +109,7 @@ class QuizGame(BaseMode):
             return "YOU SUCK :P"
 
     def instructions(self) -> None:
-        print(f"\tHi {self.mode_manager.player_name}. Welcome to Python and Programming Quiz!")
+        print(f"\tHi {self.player_name}. Welcome to Python and Programming Quiz!")
         print()
 
     def on_exit(self) -> None:

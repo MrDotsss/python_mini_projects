@@ -53,7 +53,7 @@ class CompoundInterestCalculator(BaseMode):
         yes_no_query_invoker("Would you like to calculate again?", on_start, self.on_exit)
 
     def instructions(self) -> None:
-        print(f"\tHi {self.mode_manager.player_name}. Welcome to Compound Interest Calculator!")
+        print(f"\tHi {self.player_name}. Welcome to Compound Interest Calculator!")
         print("Which calculates the total accumulated amount, including both the initial principal and the interest it has accrued over time.\n")
 
     def on_exit(self) -> None:

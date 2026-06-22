@@ -43,7 +43,7 @@ class SimpleCalculator (BaseMode):
             print()
 
     def instructions(self) -> None:
-        print(f"\tHi {self.mode_manager.player_name}. Welcome to Simple Calculator!")
+        print(f"\tHi {self.player_name}. Welcome to Simple Calculator!")
         print("\tThis calculator allows addition, subtraction, multiplication, division and other operators")
         print("\nAVAILABLE OPERATORS: + - * / ** // ( )")
         print("type 7848 to EXIT the calculator and return to main menu\n")

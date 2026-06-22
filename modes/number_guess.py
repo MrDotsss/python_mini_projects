@@ -44,7 +44,7 @@ class NumberGuessingGame(BaseMode):
         yes_no_query_invoker("\nWould you like to play again?", self.build, self.on_exit)
 
     def instructions(self) -> None:
-        print(f"\tHi {self.mode_manager.player_name}. Welcome to Number Guessing Game!")
+        print(f"\tHi {self.player_name}. Welcome to Number Guessing Game!")
         print("Select a number between 1 and 100.")
         input("Press ENTER to start the game.")
 

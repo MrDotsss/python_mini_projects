@@ -116,7 +116,7 @@ class SimpleConverter(BaseMode):
         return (c / target["scale"]) - target["offset"]
 
     def instructions(self) -> None:
-        print(f"\tHi {self.mode_manager.player_name}. Welcome to Simple Converter!")
+        print(f"\tHi {self.player_name}. Welcome to Simple Converter!")
         print("\tThis can convert between different modes. Length and Weight")
         print("\nLength: meter, kilometer, mile, kilometer, yard, feet, inches.")
         print("Weight: kilogram, gram, milligram, pounds, ounce")

@@ -26,6 +26,10 @@ class BaseMode(ABC):
     def on_exit(self) -> None:
         pass
 
+    @property
+    def player_name(self) -> str:
+        return self.mode_manager.player_name.upper()
+
 class ModeManager:
     def __init__(self, player_name: str, mode_list: list[BaseMode]) -> None:
         self.player_name: str = player_name
@@ -35,7 +39,7 @@ class ModeManager:
 
     def show_menu(self) -> None:
         clear_console()
-        print(f"\nHello {self.player_name}. Welcome to Bro Code Exercises!")
+        print(f"\nHello {self.player_name.upper()}. Welcome to Bro Code Exercises!")
         print("This is based from 12 hour Python Course from BroCode for FREE (with my own implementations).")
 
         print("\nAvailable modes:")

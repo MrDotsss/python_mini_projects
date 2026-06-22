@@ -186,7 +186,7 @@ class ShoppingCart(BaseMode):
 
 
     def instructions(self) -> None:
-        print(f"\tHi {self.mode_manager.player_name}. Welcome to Shopping Cart!")
+        print(f"\tHi {self.player_name}. Welcome to Shopping Cart!")
         print("A simple Shopping Cart.\n")
 
     def on_exit(self) -> None:

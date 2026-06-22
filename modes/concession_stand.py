@@ -108,7 +108,7 @@ class ConcessionStand(BaseMode):
         return sum(item.total_price() for item in self.cart.values())
 
     def instructions(self) -> None:
-        print(f"Welcome to Concession Stand, {self.mode_manager.player_name}!\n")
+        print(f"Welcome to Concession Stand, {self.player_name}!\n")
 
     def on_exit(self) -> None:
         print("\n\tThank you for checking this out!")

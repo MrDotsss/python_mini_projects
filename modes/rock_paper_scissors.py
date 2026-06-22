@@ -1,6 +1,5 @@
 import time
 import random
-from time import sleep
 
 from core.mode_manager import ModeManager, BaseMode
 from core.tools import clear_console, get_non_empty_int_input, get_non_empty_int_range_input, \
@@ -15,16 +14,14 @@ class RockPaperScissorsMode(BaseMode):
         self.rounds: int = 0
         self.cpu_score: int = 0
         self.player_score: int = 0
-        self.player_name: str = ""
         self.max_score = 5
-        self.selection: tuple = ("ROCK", "PAPER", "SCISSORS")
+        self.selection: tuple = ("ROCK", "PAPER", "SCISSORS", "QUIT")
 
     def mode_name(self) -> str:
         return "Rock Paper Scissors"
 
     def start(self, mode_manager: ModeManager) -> None:
         self.mode_manager = mode_manager
-        self.player_name = mode_manager.player_name
         clear_console()
         self.instructions()
 
@@ -42,6 +39,10 @@ class RockPaperScissorsMode(BaseMode):
 
             self.cpu_choice = random.choice(self.selection)
             self.player_choice = get_non_empty_word_range_input("Decide: ", self.selection).upper()
+
+            if self.player_choice == "QUIT":
+                self.on_exit()
+                return
 
             clear_console()
 
@@ -93,7 +94,7 @@ class RockPaperScissorsMode(BaseMode):
         self.start(self.mode_manager)
 
     def instructions(self) -> None:
-        print(f"\tHi {self.mode_manager.player_name}. Welcome to Number Guessing Game!")
+        print(f"\tHi {self.player_name}. Welcome to Number Guessing Game!")
         print("Beat CPU into rock paper scissors.")
         print("Choices:")
         print("1. Start Game")
