@@ -1,6 +1,8 @@
 import os
 import re
 from typing import Callable
+from collections.abc import Iterable
+import copy
 
 def get_int_input(query: str) -> int:
     while True:
@@ -65,6 +67,27 @@ def get_non_empty_word_input(query: str) -> str:
         user_input: str = input(query)
         if not user_input.strip() or user_input.isnumeric():
             print("You entered an empty or numeric value. Try again")
+        else:
+            return user_input
+
+
+def get_non_empty_word_range_input(query: str, word_range: Iterable[str], case_sensitive: bool = False) -> str:
+    if not case_sensitive:
+        valid_words: set[str] = {item.lower() for item in word_range}
+        display_words: list[str] = list(word_range)
+    else:
+        valid_words: set[str] = set(word_range)
+        display_words: list[str] = list(valid_words)
+
+    while True:
+        print(*display_words, sep=", ")
+        user_input: str = input(query)
+        check_input = user_input if case_sensitive else user_input.lower()
+
+        if not check_input.strip() or check_input.isnumeric():
+            print("You entered an empty or numeric value. Try again.")
+        elif check_input not in valid_words:
+            print("Invalid Input, must be: ")
         else:
             return user_input
 

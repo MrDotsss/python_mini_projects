@@ -4,6 +4,7 @@ from modes.countdown_timer import CountdownTimer
 from modes.madlibs import MadlibsGame
 from modes.number_guess import NumberGuessingGame
 from modes.quiz_game import QuizGame
+from modes.rock_paper_scissors import RockPaperScissorsMode
 from modes.shopping_cart import ShoppingCart
 from modes.simple_calculator import SimpleCalculator
 from modes.simple_converter import SimpleConverter
@@ -22,6 +23,7 @@ def main() -> None:
         QuizGame(),
         ConcessionStand(),
         NumberGuessingGame(),
+        RockPaperScissorsMode()
     ])
     mode_manager.show_menu()
 
