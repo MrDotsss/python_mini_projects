@@ -2,6 +2,7 @@ from core.mode_manager import ModeManager
 from modes.concession_stand import ConcessionStand
 from modes.countdown_timer import CountdownTimer
 from modes.madlibs import MadlibsGame
+from modes.number_guess import NumberGuessingGame
 from modes.quiz_game import QuizGame
 from modes.shopping_cart import ShoppingCart
 from modes.simple_calculator import SimpleCalculator
@@ -20,6 +21,7 @@ def main() -> None:
         ShoppingCart(),
         QuizGame(),
         ConcessionStand(),
+        NumberGuessingGame(),
     ])
     mode_manager.show_menu()
 
