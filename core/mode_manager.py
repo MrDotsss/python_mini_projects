@@ -58,6 +58,7 @@ class ModeManager:
             self.current_mode.start(self)
 
     def exit_mode(self) -> None:
+        self.current_mode = None
         self.show_menu()
 
     def __generate_choices(self) -> None:

@@ -2,7 +2,7 @@ import random
 import time
 
 from core.mode_manager import ModeManager, BaseMode
-from core.tools import clear_console, get_non_empty_int_range_input, yes_no_query_invoker
+from core.tools import clear_console, get_int_range_input, yes_no_query_invoker
 
 
 class LuckDiceRoller(BaseMode):
@@ -53,7 +53,8 @@ class LuckDiceRoller(BaseMode):
         self.player_roll.clear()
         self.computer_roll.clear()
         self.instructions()
-        self.max_dice = get_non_empty_int_range_input(f"Enter max dice to roll (Current: {self.max_dice}): ", 1, 12)
+        print()
+        self.max_dice = get_int_range_input(f"Enter max dice to roll: ", self.max_dice, 1, 12)
         self.build()
 
     def build(self) -> None:
@@ -93,14 +94,13 @@ class LuckDiceRoller(BaseMode):
 
         if player_total == cpu_total:
             print("DRAW!")
-            return
-
-        player_win: bool = player_total > cpu_total
-
-        if player_win:
-            print(f"{self.player_name} WINS!")
         else:
-            print("CPU WINS!")
+            player_win: bool = player_total > cpu_total
+
+            if player_win:
+                print(f"{self.player_name} WINS!")
+            else:
+                print("CPU WINS!")
 
         time.sleep(1)
 
@@ -143,6 +143,6 @@ class LuckDiceRoller(BaseMode):
         input("Press ENTER to start the game.")
 
     def on_exit(self) -> None:
-        print("\n\tThank you for checking this out!")
+        print("Thank you for checking this out!")
         input("Press ENTER to return to main menu.")
         self.mode_manager.exit_mode()

@@ -2,14 +2,36 @@ import os
 import re
 from typing import Callable
 from collections.abc import Iterable
-import copy
+import pwinput
+import time
 
-def get_int_input(query: str) -> int:
+def get_int_input(query: str, pre_value: int) -> int:
     while True:
-        user_input: str = input(query)
+        user_input: str = input(f"Current value: {pre_value} enter empty value to accept current\n {query}: ")
         try:
+            if not user_input.strip():
+                return pre_value
+
             value:int = int(user_input)
             return value
+        except ValueError:
+            print("Please enter a valid number")
+
+def get_int_range_input(query: str, pre_value: int, start: int, end: int) -> int:
+    while True:
+        print(f"Current value: {pre_value} | ENTER EMPTY value to accept current")
+        user_input: str = input(query)
+        try:
+            if not user_input.strip():
+                return pre_value
+
+            value: int = int(user_input)
+
+            if value < start or value > end:
+                print(f"Please enter a number between {start} and {end}.")
+            else:
+                return value
+
         except ValueError:
             print("Please enter a valid number")
 
@@ -99,6 +121,14 @@ def get_non_empty_str_input(query: str) -> str:
         else:
             return user_input
 
+def get_non_empty_pass_input(query: str, mask: str) -> str:
+    while True:
+        user_input: str = pwinput.pwinput(prompt=query, mask=mask)
+        if not user_input.strip():
+            print("You entered an empty value. Try again")
+        else:
+            return user_input
+
 def get_non_empty_unit_input(query: str, unit_dictionary: dict) -> tuple[float, str] | None:
     pattern = re.compile(r"^\s*(-?\d+(?:\.\d+)?)\s*([a-zA-Z]+)\s*$")
 
@@ -127,13 +157,22 @@ def get_non_empty_unit_input(query: str, unit_dictionary: dict) -> tuple[float, 
 
         return value, unit
 
-def yes_no_query_invoker(query: str, func_yes: Callable[[], None], func_no: Callable[[], None]) -> None:
+def yes_no_query_invoker(query: str, func_yes: Callable[[], None] | None, func_no: Callable[[], None] | None) -> None:
     q: str = get_non_empty_str_input(f"{query} Y/N: ")
     while q.lower() != "y" and q.lower() != "n":
         print("\n\tPlease enter Y or N.\n")
         q: str = get_non_empty_str_input(f"{query} Y/N: ")
 
-    func_yes() if q.lower() == "y" else func_no()
+    if q.lower() == "y" and func_yes is not None:
+        func_yes()
+    elif q.lower() == "n" and func_no is not None:
+        func_no()
+
+def display_loading_seq(message: str, visual: str, load_range: range, time_step: float) -> None:
+    for i in load_range:
+        print(f"{message} | {visual*i}")
+        time.sleep(time_step)
+        clear_console()
 
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')

@@ -126,3 +126,51 @@ A food ordering system that simulates a concession stand where users can select 
 * Practices dictionary-based menus and dynamic UI generation
 * Demonstrates cart management and aggregation logic
 * Reinforces real-world workflow simulation (ordering system)
+
+### `modes/number_guess.py`
+
+**Purpose:**
+A classic number guessing game where players try to guess a randomly generated number with feedback after each attempt.
+
+**Benefits:**
+
+* Practices random number generation
+* Demonstrates loops and conditional logic
+* Reinforces input validation and game state tracking
+* Introduces interactive gameplay with replay functionality
+
+### `modes/rock_paper_scissors.py`
+
+**Purpose:**
+A command-line Rock, Paper, Scissors game where players compete against a CPU in a best-of series with configurable winning scores.
+
+**Benefits:**
+
+* Practices randomization and game logic
+* Demonstrates score tracking and round management
+* Reinforces conditional logic and modular design
+* Introduces configurable gameplay settings and replayability
+
+### `modes/dice_roller.py`
+
+**Purpose:**
+A console-based dice rolling game where players compete against the CPU using animated ASCII dice and randomized rolls.
+
+**Benefits:**
+
+* Practices random number generation and probability concepts
+* Demonstrates ASCII art rendering and console animation
+* Reinforces list manipulation and score calculation
+* Introduces engaging CLI game design with configurable gameplay
+
+### `modes/banking_program.py`
+
+**Purpose:**
+A command-line ATM simulator that allows users to authenticate, check balances, deposit, withdraw, and review transaction history.
+
+**Benefits:**
+
+* Practices finite state machine (FSM) style application flow
+* Demonstrates object-oriented modeling with transaction records
+* Reinforces authentication, validation, and business rules
+* Introduces transaction history tracking and state persistence during runtime

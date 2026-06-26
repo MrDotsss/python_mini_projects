@@ -1,18 +1,9 @@
 from core.mode_manager import ModeManager
-from modes.concession_stand import ConcessionStand
-from modes.countdown_timer import CountdownTimer
-from modes.madlibs import MadlibsGame
-from modes.number_guess import NumberGuessingGame
-from modes.quiz_game import QuizGame
-from modes.rock_paper_scissors import RockPaperScissorsMode
-from modes.shopping_cart import ShoppingCart
-from modes.simple_calculator import SimpleCalculator
-from modes.simple_converter import SimpleConverter
-from modes.compound_interest_calculator import CompoundInterestCalculator
-from modes.dice_roller import LuckDiceRoller
-from core.tools import get_non_empty_word_input
+from modes import *
+from core.tools import get_non_empty_word_input, clear_console
 
 def main() -> None:
+    clear_console()
     user_name: str = get_non_empty_word_input("Enter player name: ")
     mode_manager: ModeManager = ModeManager(user_name, [
         MadlibsGame(),
@@ -26,6 +17,7 @@ def main() -> None:
         NumberGuessingGame(),
         RockPaperScissorsMode(),
         LuckDiceRoller(),
+        BankingProgram(),
     ])
     mode_manager.show_menu()
 
