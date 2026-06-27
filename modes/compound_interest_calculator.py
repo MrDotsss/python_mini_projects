@@ -16,7 +16,7 @@ class CompoundInterestCalculator(BaseMode):
         return "Compound Interest Calculator"
 
     def start(self, mode_manager: ModeManager) -> None:
-        self.mode_manager = mode_manager
+        super().start(mode_manager)
         clear_console()
         self.instructions()
 

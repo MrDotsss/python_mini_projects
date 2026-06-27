@@ -29,7 +29,7 @@ class ShoppingCart(BaseMode):
         return 'Shopping Cart'
 
     def start(self, mode_manager: ModeManager) -> None:
-        self.mode_manager = mode_manager
+        super().start(mode_manager)
         clear_console()
         self.instructions()
         self.__main_menu()

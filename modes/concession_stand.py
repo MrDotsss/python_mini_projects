@@ -26,7 +26,7 @@ class ConcessionStand(BaseMode):
         return "Concession Stand"
 
     def start(self, mode_manager: ModeManager) -> None:
-        self.mode_manager = mode_manager
+        super().start(mode_manager)
         self.cart = {}
         clear_console()
         self.instructions()

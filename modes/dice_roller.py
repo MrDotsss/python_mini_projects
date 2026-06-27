@@ -48,7 +48,7 @@ class LuckDiceRoller(BaseMode):
         return "Lucky Dice Roller"
 
     def start(self, mode_manager: ModeManager) -> None:
-        self.mode_manager = mode_manager
+        super().start(mode_manager)
         clear_console()
         self.player_roll.clear()
         self.computer_roll.clear()

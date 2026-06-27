@@ -31,7 +31,7 @@ class QuizGame(BaseMode):
         return "Quiz Game"
 
     def start(self, mode_manager: ModeManager) -> None:
-        self.mode_manager = mode_manager
+        super().start(mode_manager)
         self.__reset()
 
         clear_console()

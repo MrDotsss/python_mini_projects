@@ -47,7 +47,7 @@ class BankingProgram(BaseMode):
         return "BANK PROGRAM - ATM"
 
     def start(self, mode_manager: ModeManager) -> None:
-        self.mode_manager = mode_manager
+        super().start(mode_manager)
         self.is_authenticated = False
         clear_console()
         self.instructions()

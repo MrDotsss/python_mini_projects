@@ -47,7 +47,7 @@ class MadlibsGame(BaseMode):
         return "Madlibs Game"
     
     def start(self, mode_manager: ModeManager) -> None:
-        self.mode_manager = mode_manager
+        super().start(mode_manager)
         self.instructions()
         self.__get_inputs()
         clear_console()

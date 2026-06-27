@@ -10,9 +10,8 @@ class BaseMode(ABC):
     def mode_name(self) -> str:
         pass
 
-    @abstractmethod
     def start(self, mode_manager: ModeManager) -> None:
-        pass
+        self.mode_manager = mode_manager
 
     @abstractmethod
     def build(self) -> None:
