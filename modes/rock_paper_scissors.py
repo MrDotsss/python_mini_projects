@@ -37,7 +37,9 @@ class RockPaperScissorsMode(BaseMode):
             print(f"ROUND {self.rounds}")
             print(f"{self.player_name}: {self.player_score} | CPU: {self.cpu_score}")
 
-            self.cpu_choice = random.choice(self.selection)
+            cpu_selection: tuple[str] = self.selection[:-1]
+
+            self.cpu_choice = random.choice(cpu_selection)
             self.player_choice = get_non_empty_word_range_input("Decide: ", self.selection).upper()
 
             if self.player_choice == "QUIT":
