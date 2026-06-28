@@ -20,6 +20,7 @@ def main() -> None:
         BankingProgram(),
         SlotMachineGame(),
         MessageEncryption(),
+        HangmanGame()
     ])
     mode_manager.show_menu()
 

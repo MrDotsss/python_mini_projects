@@ -3,16 +3,15 @@ import random
 import time
 
 from core.mode_manager import ModeManager, BaseMode
-from core.tools import animated_print_replace_line, display_loading_seq, get_non_empty_int_range_input, clear_console, \
-    get_non_empty_str_input
+from core.tools import animated_print_replace_line, display_loading_seq, clear_console, get_non_empty_str_input
 
 
 class MessageEncryption(BaseMode):
     def __init__(self):
         super().__init__()
-        self.chars: list[str] = list(" " + string.punctuation + string.digits + string.ascii_letters)
-        self.keys = self.chars.copy()
-        self.cpu_lines: list[str] = [
+        self.chars: tuple = tuple(" " + string.punctuation + string.digits + string.ascii_letters)
+        self.keys: list[str] = list(self.chars)
+        self.cpu_lines: tuple = (
             "Agent, we've intercepted an encrypted message. What should we do?",
             "Only someone with the correct key can read an encrypted message.",
             "Encryption helps keep sensitive information private.",
@@ -23,7 +22,7 @@ class MessageEncryption(BaseMode):
             "Can encrypted data be transmitted over public networks?",
             "Why should encryption keys be kept secret?",
             "Excellent. Understanding encryption and decryption is essential for every secret agent."
-        ]
+        )
 
     def start(self, mode_manager: ModeManager) -> None:
         super().start(mode_manager)

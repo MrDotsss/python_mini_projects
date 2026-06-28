@@ -198,3 +198,16 @@ An interactive secret agent simulation that demonstrates message encryption and 
 * Demonstrates custom encryption and decryption algorithms
 * Reinforces modular programming and interactive dialogue systems
 * Introduces simple CLI animations and storytelling mechanics
+
+### `modes/hangman_game.py`
+
+**Purpose:**
+A console-based Hangman game where players guess letters to reveal a hidden word before the hangman drawing is completed.
+
+**Benefits:**
+
+* Practices string manipulation and character matching
+* Demonstrates game state management and win/loss conditions
+* Reinforces collections, loops, and conditional logic
+* Introduces ASCII art, keyboard visualization, and interactive CLI gameplay
+
