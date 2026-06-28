@@ -174,3 +174,15 @@ A command-line ATM simulator that allows users to authenticate, check balances, 
 * Demonstrates object-oriented modeling with transaction records
 * Reinforces authentication, validation, and business rules
 * Introduces transaction history tracking and state persistence during runtime
+
+### `modes/slot_machine.py`
+
+**Purpose:**
+A console-based slot machine game where players bet on a slot, spin randomized symbols, and earn points through matching combinations and score multipliers.
+
+**Benefits:**
+
+* Practices randomization and probability-based game mechanics
+* Demonstrates custom scoring systems and multiplier logic
+* Reinforces game state management and player progression
+* Introduces animated console effects and engaging CLI gameplay

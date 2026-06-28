@@ -10,3 +10,4 @@ from .shopping_cart import ShoppingCart
 from .simple_calculator import SimpleCalculator
 from .simple_converter import SimpleConverter
 from .banking_program import BankingProgram
+from .slot_machine import SlotMachineGame

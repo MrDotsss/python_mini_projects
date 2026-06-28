@@ -18,6 +18,7 @@ def main() -> None:
         RockPaperScissorsMode(),
         LuckDiceRoller(),
         BankingProgram(),
+        SlotMachineGame(),
     ])
     mode_manager.show_menu()
 
