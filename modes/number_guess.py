@@ -6,16 +6,16 @@ from core.tools import clear_console, get_non_empty_int_input, get_non_empty_int
 
 
 class NumberGuessingGame(BaseMode):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager):
+        super().__init__(mode_manager)
         self.number_to_guess: int = 0
         self.guess_count: int = 0
 
     def mode_name(self) -> str:
         return "Number Guessing Game"
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         clear_console()
         self.instructions()
         self.build()

@@ -4,8 +4,8 @@ from core.tools import clear_console, get_non_empty_float_input, get_non_empty_i
 
 
 class CompoundInterestCalculator(BaseMode):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager):
+        super().__init__(mode_manager)
         self.principal_balance: float = 0.0
         self.interest_rate: float = 0.0
         self.period: int = 0
@@ -15,8 +15,8 @@ class CompoundInterestCalculator(BaseMode):
     def mode_name(self) -> str:
         return "Compound Interest Calculator"
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         clear_console()
         self.instructions()
 
@@ -48,7 +48,7 @@ class CompoundInterestCalculator(BaseMode):
         print(f"\nFinal Amount: $1{self.final_amount:,.2f} after {self.period} years.")
 
         def on_start() -> None:
-            self.start(self.mode_manager)
+            self.start()
 
         yes_no_query_invoker("Would you like to calculate again?", on_start, self.on_exit)
 

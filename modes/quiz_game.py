@@ -5,8 +5,8 @@ from core.tools import clear_console, get_non_empty_str_input, yes_no_query_invo
 
 
 class QuizGame(BaseMode):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager) -> None:
+        super().__init__(mode_manager)
         self.current_score: int = 0
         self.question_index: int = 0
         self.guesses: list[str] = []
@@ -30,8 +30,8 @@ class QuizGame(BaseMode):
     def mode_name(self) -> str:
         return "Quiz Game"
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         self.__reset()
 
         clear_console()
@@ -96,7 +96,7 @@ class QuizGame(BaseMode):
         time.sleep(1)
 
         def on_start() -> None:
-            self.start(self.mode_manager)
+            self.start()
 
         yes_no_query_invoker("Would you like to try again?", on_start, self.on_exit)
 

@@ -6,8 +6,8 @@ from core.tools import clear_console, get_non_empty_word_input, get_non_empty_in
 # by filling in the blanks with random words
 
 class MadlibsGame(BaseMode):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager) -> None:
+        super().__init__(mode_manager)
         self.adjective_1: str = ""
         self.adjective_2: str = ""
         self.adjective_3: str = ""
@@ -46,8 +46,8 @@ class MadlibsGame(BaseMode):
     def mode_name(self) -> str:
         return "Madlibs Game"
     
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         self.instructions()
         self.__get_inputs()
         clear_console()

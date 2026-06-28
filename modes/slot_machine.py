@@ -7,8 +7,8 @@ from core.tools import clear_console, yes_no_query_invoker, get_non_empty_int_ra
 
 
 class SlotMachineGame(BaseMode):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager):
+        super().__init__(mode_manager)
         self.max_slots: int = 3
         self.spin_cost: float = 1
         self.starting_balance: float = 0
@@ -22,8 +22,8 @@ class SlotMachineGame(BaseMode):
     def mode_name(self) -> str:
         return "Luck Slot Machine"
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         clear_console()
         self.starting_balance = 0
         self.current_multiplier = 1

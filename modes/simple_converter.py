@@ -37,8 +37,8 @@ class Category(Enum):
     TEMPERATURE = "temperature"
 
 class SimpleConverter(BaseMode):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager):
+        super().__init__(mode_manager)
         self.current_category: Category | None = None
         self.current_unit: str = ""
         self.current_value: float = 0.0
@@ -48,8 +48,8 @@ class SimpleConverter(BaseMode):
     def mode_name(self) -> str:
         return "Simple Converter"
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         clear_console()
         self.instructions()
 
@@ -97,7 +97,7 @@ class SimpleConverter(BaseMode):
             print(f"{self.current_value}{self.current_unit} => {base_value:,.2f}{self.converting_unit}")
 
         def on_start() -> None:
-            self.start(self.mode_manager)
+            self.start()
 
         yes_no_query_invoker("Would you like to convert again?", on_start, self.on_exit)
 

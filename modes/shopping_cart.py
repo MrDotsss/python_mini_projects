@@ -19,8 +19,8 @@ class ShoppingItem:
         return self.price * self.quantity
 
 class ShoppingCart(BaseMode):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager):
+        super().__init__(mode_manager)
         self.items: list[ShoppingItem] = []
         self.total: float = 0
 
@@ -28,8 +28,8 @@ class ShoppingCart(BaseMode):
     def mode_name(self) -> str:
         return 'Shopping Cart'
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         clear_console()
         self.instructions()
         self.__main_menu()

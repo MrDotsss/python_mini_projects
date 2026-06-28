@@ -7,8 +7,8 @@ from core.tools import animated_print_replace_line, display_loading_seq, clear_c
 
 
 class MessageEncryption(BaseMode):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager):
+        super().__init__(mode_manager)
         self.chars: tuple = tuple(" " + string.punctuation + string.digits + string.ascii_letters)
         self.keys: list[str] = list(self.chars)
         self.cpu_lines: tuple = (
@@ -24,8 +24,8 @@ class MessageEncryption(BaseMode):
             "Excellent. Understanding encryption and decryption is essential for every secret agent."
         )
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         random.shuffle(self.keys)
         self.instructions()
         self.build()

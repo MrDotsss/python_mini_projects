@@ -6,8 +6,8 @@ from modes.shopping_cart import ShoppingItem
 import time
 
 class ConcessionStand(BaseMode):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager) -> None:
+        super().__init__(mode_manager)
         self.menu: dict[int, tuple] = {
             1: ("Adobo", 120.00),
             2: ("Sinigang", 140.00),
@@ -25,8 +25,8 @@ class ConcessionStand(BaseMode):
     def mode_name(self) -> str:
         return "Concession Stand"
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         self.cart = {}
         clear_console()
         self.instructions()

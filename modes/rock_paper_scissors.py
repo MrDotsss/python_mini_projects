@@ -7,8 +7,8 @@ from core.tools import clear_console, get_non_empty_int_input, get_non_empty_int
 
 
 class RockPaperScissorsMode(BaseMode):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager):
+        super().__init__(mode_manager)
         self.cpu_choice: str = ""
         self.player_choice: str = ""
         self.rounds: int = 0
@@ -20,8 +20,8 @@ class RockPaperScissorsMode(BaseMode):
     def mode_name(self) -> str:
         return "Rock Paper Scissors"
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         clear_console()
         self.instructions()
 
@@ -62,7 +62,7 @@ class RockPaperScissorsMode(BaseMode):
             print("YOU LOSE! WAHAHAHAHAA")
 
         def on_start():
-            self.start(self.mode_manager)
+            self.start()
 
         yes_no_query_invoker("Play again?", on_start, self.on_exit)
 
@@ -93,7 +93,7 @@ class RockPaperScissorsMode(BaseMode):
         self.max_score = get_non_empty_int_input("Enter max score: ")
         print(f"Max Score has been set to {self.max_score}")
         time.sleep(0.5)
-        self.start(self.mode_manager)
+        self.start()
 
     def instructions(self) -> None:
         print(f"\tHi {self.player_name}. Welcome to Number Guessing Game!")

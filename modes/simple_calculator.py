@@ -6,15 +6,15 @@ import warnings
 warnings.filterwarnings("ignore", category=SyntaxWarning)
 
 class SimpleCalculator (BaseMode):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager) -> None:
+        super().__init__(mode_manager)
         self.equation: str = ""
 
     def mode_name(self) -> str:
         return "Simple Calculator"
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         self.instructions()
         while True:
             self.equation: str = get_non_empty_equation_input("Enter equation: ")

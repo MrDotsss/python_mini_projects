@@ -34,8 +34,8 @@ class TransactionHistory:
             return f"${self.amount:,.2f}"
 
 class BankingProgram(BaseMode):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager):
+        super().__init__(mode_manager)
         self.is_authenticated = False
         self.is_running = False
         self.current_state: States = States.LOGIN
@@ -46,8 +46,8 @@ class BankingProgram(BaseMode):
     def mode_name(self) -> str:
         return "BANK PROGRAM - ATM"
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         self.is_authenticated = False
         clear_console()
         self.instructions()

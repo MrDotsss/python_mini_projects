@@ -6,8 +6,8 @@ from core.tools import clear_console, get_int_range_input, yes_no_query_invoker
 
 
 class LuckDiceRoller(BaseMode):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager):
+        super().__init__(mode_manager)
         self.dice_art = {
             1: ("┌─────────┐",
                 "│         │",
@@ -47,8 +47,8 @@ class LuckDiceRoller(BaseMode):
     def mode_name(self) -> str:
         return "Lucky Dice Roller"
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         clear_console()
         self.player_roll.clear()
         self.computer_roll.clear()
@@ -105,7 +105,7 @@ class LuckDiceRoller(BaseMode):
         time.sleep(1)
 
         def on_start():
-            self.start(self.mode_manager)
+            self.start()
 
         yes_no_query_invoker("Play again?", on_start, self.on_exit)
 

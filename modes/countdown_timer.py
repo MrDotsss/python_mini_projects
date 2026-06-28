@@ -4,16 +4,16 @@ from core.tools import clear_console, get_non_empty_str_input, get_non_empty_int
 
 
 class CountdownTimer(BaseMode):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager):
+        super().__init__(mode_manager)
         self.countdown: int = 0
         self.end_message: str = ""
 
     def mode_name(self) -> str:
         return "Countdown Timer"
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         clear_console()
         self.end_message: str = get_non_empty_str_input("Enter timer message: ")
 
@@ -36,7 +36,7 @@ class CountdownTimer(BaseMode):
         print(f"{self.end_message}\n")
 
         def on_start() -> None:
-            self.start(self.mode_manager)
+            self.start()
 
         yes_no_query_invoker("Would you like to try again?", on_start, self.on_exit)
 

@@ -7,8 +7,8 @@ from core.tools import clear_console, display_loading_seq, get_non_empty_letter_
 
 
 class HangmanGame(BaseMode):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, mode_manager: ModeManager):
+        super().__init__(mode_manager)
         self.guess_count: int = 0
         self.current_word: str | None = None
         self.current_guess: list[str] = []
@@ -65,8 +65,8 @@ class HangmanGame(BaseMode):
         )
 
 
-    def start(self, mode_manager: ModeManager) -> None:
-        super().start(mode_manager)
+    def start(self) -> None:
+        
         clear_console()
 
         self.current_word = None
@@ -125,7 +125,7 @@ class HangmanGame(BaseMode):
 
         if not self.is_running:
             def on_start():
-                self.start(self.mode_manager)
+                self.start()
             yes_no_query_invoker("Would you like to play again?", on_start, self.on_exit)
 
     def __display_hangman(self) -> None:

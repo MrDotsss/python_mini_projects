@@ -3,15 +3,16 @@ from abc import ABC, abstractmethod
 from core.tools import clear_console, get_non_empty_int_range_input
 
 class BaseMode(ABC):
-    def __init__(self) -> None:
-        self.mode_manager: ModeManager | None = None
+    def __init__(self, mode_manager: ModeManager) -> None:
+        self.mode_manager: ModeManager = mode_manager
 
     @abstractmethod
     def mode_name(self) -> str:
         pass
 
-    def start(self, mode_manager: ModeManager) -> None:
-        self.mode_manager = mode_manager
+    @abstractmethod
+    def start(self) -> None:
+        pass
 
     @abstractmethod
     def build(self) -> None:
@@ -34,7 +35,6 @@ class ModeManager:
         self.player_name: str = player_name
         self.mode_list: list[BaseMode] = mode_list
         self.current_mode: BaseMode | None = None
-        self.exit_index: int = len(mode_list) + 1
 
     def show_menu(self) -> None:
         clear_console()
@@ -54,11 +54,15 @@ class ModeManager:
     def play_mode(self) -> None:
         if self.current_mode is not None:
             clear_console()
-            self.current_mode.start(self)
+            self.current_mode.start()
 
     def exit_mode(self) -> None:
         self.current_mode = None
         self.show_menu()
+
+    @property
+    def exit_index(self) -> int:
+        return len(self.mode_list) + 1
 
     def __generate_choices(self) -> None:
         for index, mode in enumerate(self.mode_list):
