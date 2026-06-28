@@ -186,3 +186,15 @@ A console-based slot machine game where players bet on a slot, spin randomized s
 * Demonstrates custom scoring systems and multiplier logic
 * Reinforces game state management and player progression
 * Introduces animated console effects and engaging CLI gameplay
+
+### `modes/message_encryption.py`
+
+**Purpose:**
+An interactive secret agent simulation that demonstrates message encryption and decryption through a custom substitution cipher and animated console effects.
+
+**Benefits:**
+
+* Practices string manipulation and character mapping
+* Demonstrates custom encryption and decryption algorithms
+* Reinforces modular programming and interactive dialogue systems
+* Introduces simple CLI animations and storytelling mechanics

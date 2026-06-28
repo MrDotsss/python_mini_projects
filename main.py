@@ -19,6 +19,7 @@ def main() -> None:
         LuckDiceRoller(),
         BankingProgram(),
         SlotMachineGame(),
+        MessageEncryption(),
     ])
     mode_manager.show_menu()
 

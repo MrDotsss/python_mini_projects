@@ -174,5 +174,22 @@ def display_loading_seq(message: str, visual: str, load_range: range, time_step:
         time.sleep(time_step)
         clear_console()
 
+def animated_print_line(message: str, time_step: float = 0.05) -> None:
+    for i in range(len(message)):
+        print(message[i], end="")
+        time.sleep(time_step)
+    print()
+
+def animated_print_replace_line(original: str, replace: str, time_step: float = 0.05, confirm_input: bool = True, status: str = "Replacing") -> None:
+    for i in range(len(original)):
+        print(status)
+        print(f"{replace[:i]}-{original[i+1:]}")
+        time.sleep(time_step)
+        clear_console()
+    print(replace)
+    time.sleep(1)
+    if confirm_input:
+        input("\nPress enter to continue...")
+
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
