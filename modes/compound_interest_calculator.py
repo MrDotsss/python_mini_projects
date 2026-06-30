@@ -11,7 +11,7 @@ class CompoundInterestCalculator(BaseMode):
         self.period: int = 0
         self.final_amount: float = 0.0
 
-
+    @property
     def mode_name(self) -> str:
         return "Compound Interest Calculator"
 

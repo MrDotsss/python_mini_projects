@@ -10,6 +10,7 @@ class SimpleCalculator (BaseMode):
         super().__init__(mode_manager)
         self.equation: str = ""
 
+    @property
     def mode_name(self) -> str:
         return "Simple Calculator"
 

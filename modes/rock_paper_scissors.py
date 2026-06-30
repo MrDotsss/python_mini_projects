@@ -17,6 +17,7 @@ class RockPaperScissorsMode(BaseMode):
         self.max_score = 5
         self.selection: tuple = ("ROCK", "PAPER", "SCISSORS", "QUIT")
 
+    @property
     def mode_name(self) -> str:
         return "Rock Paper Scissors"
 
@@ -53,7 +54,7 @@ class RockPaperScissorsMode(BaseMode):
                 time.sleep(0.5)
                 clear_console()
 
-            self.__resolve()
+            self._resolve()
             time.sleep(1)
 
         if self.player_score > self.cpu_score:
@@ -66,7 +67,7 @@ class RockPaperScissorsMode(BaseMode):
 
         yes_no_query_invoker("Play again?", on_start, self.on_exit)
 
-    def __resolve(self):
+    def _resolve(self):
         print(f"{self.player_name}: {self.player_choice} | CPU: {self.cpu_choice}")
 
         player_index: int = self.selection.index(self.player_choice)
@@ -88,7 +89,7 @@ class RockPaperScissorsMode(BaseMode):
 
 
 
-    def __settings(self):
+    def _settings(self):
         print(f"Current Max Score: {self.max_score}")
         self.max_score = get_non_empty_int_input("Enter max score: ")
         print(f"Max Score has been set to {self.max_score}")
@@ -103,7 +104,7 @@ class RockPaperScissorsMode(BaseMode):
         print("2. Set Max Score")
 
         user_input: int = get_non_empty_int_range_input("Choice: ", 1, 2)
-        self.build() if user_input == 1 else self.__settings()
+        self.build() if user_input == 1 else self._settings()
 
     def on_exit(self) -> None:
         print("\n\tThank you for checking this out!")

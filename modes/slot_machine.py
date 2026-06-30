@@ -1,8 +1,8 @@
-import math
 import random
 import time
 
 from core.mode_manager import ModeManager, BaseMode
+from core.save_manager import load_state, save_exists, clear_save, save_state
 from core.tools import clear_console, yes_no_query_invoker, get_non_empty_int_range_input, get_non_empty_float_input
 
 
@@ -19,39 +19,50 @@ class SlotMachineGame(BaseMode):
         self.current_bet_slot: int | None = None
         self.is_running: bool = False
 
+    @property
     def mode_name(self) -> str:
         return "Luck Slot Machine"
 
-    def start(self) -> None:
-        
-        clear_console()
+    def reset(self) -> None:
+        if save_exists(self.mode_name):
+            clear_save(self.mode_name)
         self.starting_balance = 0
         self.current_multiplier = 1
-        self.current_bet_slot = None
-        self.current_spin_slot.clear()
-        self.is_running = True
 
         self.instructions()
 
         self.current_score = self.starting_balance
+        self.spin_cost = self.max_slots / 3
+
+    def start(self) -> None:
+        clear_console()
+
+        if save_exists(self.mode_name) and self._load_object() and self.current_score > 0:
+            print("You still have balance left from last game.")
+            yes_no_query_invoker("Continue? ", None, self.reset)
+        else:
+            self.reset()
+
+        self.current_bet_slot = None
+        self.current_spin_slot.clear()
+        self.is_running = True
+
         for i in range(self.max_slots):
             self.current_spin_slot.append(random.choice(self.slot_icons))
-
-        self.spin_cost = self.max_slots / 3
 
         self.build()
 
     def build(self) -> None:
         while self.is_running:
-            self.__display_status()
-            self.__ask_bet()
-            self.__spinner()
-            self.__resolve()
+            self._display_status()
+            self._ask_bet()
+            self._spinner()
+            self._resolve()
 
         if not self.is_running:
             self.on_exit()
 
-    def __display_status(self) -> None:
+    def _display_status(self) -> None:
         print("SPIN TO WIN!")
         print(f"Slots: {self.max_slots} | Spin Cost: {self.spin_cost:,.2f}\n")
         print(f"Balance: {self.current_score:,.2f}")
@@ -60,9 +71,9 @@ class SlotMachineGame(BaseMode):
             print(f"Bet slot: {self.current_bet_slot}")
         print("="*(5*self.max_slots))
 
-    def __ask_bet(self) -> None:
+    def _ask_bet(self) -> None:
         clear_console()
-        self.__display_status()
+        self._display_status()
 
         for slot in range(self.max_slots):
             print("  ", end=" | ")
@@ -78,16 +89,17 @@ class SlotMachineGame(BaseMode):
         print("\n")
         self.current_bet_slot: int = get_non_empty_int_range_input(f"Select slot to bet (1-{self.max_slots}): ", 1, self.max_slots)
         self.current_score -= self.spin_cost
+        save_state(self._save_object(), self.mode_name)
 
-    def __spinner(self) -> None:
+    def _spinner(self) -> None:
         spin_range: int = random.randint(25, 50)
 
         for _ in range(spin_range):
             clear_console()
-            self.__display_status()
+            self._display_status()
             random_spins: list[str] = [random.choice(self.slot_icons) for _ in range(self.max_slots)]
 
-            self.__display_bet_slots(False)
+            self._display_bet_slots(False)
 
             print()
             for slot_num in range(self.max_slots):
@@ -99,7 +111,7 @@ class SlotMachineGame(BaseMode):
 
             time.sleep(0.05)
 
-    def __display_bet_slots(self, is_determined: bool = False) -> None:
+    def _display_bet_slots(self, is_determined: bool = False) -> None:
         match_icon, non_match_icon = "💥", "💢"
         for slot in range(self.max_slots):
             if is_determined:
@@ -109,10 +121,10 @@ class SlotMachineGame(BaseMode):
             else:
                 print(f"{match_icon if slot + 1 == self.current_bet_slot else "  "}", end=" | ")
 
-    def __resolve(self) -> None:
+    def _resolve(self) -> None:
         clear_console()
 
-        self.__display_status()
+        self._display_status()
 
         # decide slots
         for slot in range(self.max_slots):
@@ -126,7 +138,7 @@ class SlotMachineGame(BaseMode):
                 matches.append(icon)
 
         # display one by one
-        self.__display_bet_slots(False)
+        self._display_bet_slots(False)
 
         print()
         for slot_num in range(self.max_slots):
@@ -139,10 +151,10 @@ class SlotMachineGame(BaseMode):
 
         clear_console()
 
-        self.__display_status()
+        self._display_status()
 
         # display resolve
-        self.__display_bet_slots(True)
+        self._display_bet_slots(True)
 
         print()
         for slot_num in range(self.max_slots):
@@ -166,7 +178,30 @@ class SlotMachineGame(BaseMode):
             print("Pfft! Try again, multiplier resets to x1")
             self.current_multiplier = 1
 
+        save_state(self._save_object(), self.mode_name)
+
         yes_no_query_invoker("Spin Again?", None, self.on_exit)
+
+    def _save_object(self) -> dict:
+        return {
+            "max_slot": self.max_slots,
+            "spin_cost": self.spin_cost,
+            "starting_balance": self.starting_balance,
+            "current_score": self.current_score,
+            "current_multiplier": self.current_multiplier,
+        }
+
+    def _load_object(self) -> bool:
+        load: tuple[bool, dict] = load_state(self.mode_name)
+        if load[0]:
+            self.max_slots: int = load[1]["max_slot"]
+            self.spin_cost: float = load[1]["spin_cost"]
+            self.starting_balance: float = load[1]["starting_balance"]
+            self.current_score: float = load[1]["current_score"]
+            self.current_multiplier: int = load[1]["current_multiplier"]
+            return True
+        else:
+            return False
 
     def instructions(self) -> None:
         print(f"HI {self.player_name}")
@@ -177,6 +212,7 @@ class SlotMachineGame(BaseMode):
         print("More slots: High chance, low points | Less Slots: Low change, high points")
         self.max_slots = get_non_empty_int_range_input("How many slots do you want to bet on? (3-5): ", 3, 5)
         self.starting_balance = get_non_empty_float_input("Input starting balance: ")
+        save_state(self._save_object(), self.mode_name)
         input("Press ENTER to Play the Game!\n")
         clear_console()
         time.sleep(1)

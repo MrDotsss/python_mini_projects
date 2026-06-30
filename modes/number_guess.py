@@ -11,6 +11,7 @@ class NumberGuessingGame(BaseMode):
         self.number_to_guess: int = 0
         self.guess_count: int = 0
 
+    @property
     def mode_name(self) -> str:
         return "Number Guessing Game"
 

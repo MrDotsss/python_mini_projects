@@ -1,11 +1,12 @@
 from core.mode_manager import ModeManager, BaseMode
+from core.save_manager import save_state, save_exists, load_state
 from modes import *
 from core.tools import get_non_empty_word_input, clear_console
 
 def main() -> None:
     clear_console()
-    user_name: str = get_non_empty_word_input("Enter player name: ")
-    mode_manager: ModeManager = ModeManager(user_name, [])
+
+    mode_manager: ModeManager = ModeManager([])
 
     mode_list: list[BaseMode] = [
         MadlibsGame(mode_manager),

@@ -9,6 +9,7 @@ class CountdownTimer(BaseMode):
         self.countdown: int = 0
         self.end_message: str = ""
 
+    @property
     def mode_name(self) -> str:
         return "Countdown Timer"
 

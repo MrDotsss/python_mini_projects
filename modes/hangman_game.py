@@ -1,9 +1,9 @@
 import random
-import time
 import string
 
 from core.mode_manager import ModeManager, BaseMode
-from core.tools import clear_console, display_loading_seq, get_non_empty_letter_range_input, yes_no_query_invoker
+from core.save_manager import save_state, save_exists, load_state, clear_save
+from core.tools import clear_console, get_non_empty_char_range_input, yes_no_query_invoker
 
 
 class HangmanGame(BaseMode):
@@ -64,19 +64,26 @@ class HangmanGame(BaseMode):
             ("Z", "X", "C", "V", "B", "N", "M"),
         )
 
-
-    def start(self) -> None:
-        
-        clear_console()
-
+    def reset(self) -> None:
+        if save_exists(self.mode_name):
+            clear_save(self.mode_name)
         self.current_word = None
         self.current_guess.clear()
-        self.is_running = True
         self.guess_count = 0
 
+    def start(self) -> None:
+        clear_console()
+
+        if save_exists(self.mode_name) and self._load_object():
+            yes_no_query_invoker("Would you like to continue last game? ", None, self.reset)
+        else:
+            self.reset()
+
+        self.is_running = True
         self.instructions()
         self.build()
 
+    @property
     def mode_name(self) -> str:
         return "Hangman Game"
 
@@ -86,7 +93,7 @@ class HangmanGame(BaseMode):
 
         while self.is_running:
             print("="*8)
-            self.__display_hangman()
+            self._display_hangman()
             print("=" * 8)
 
             if self.guess_count >= 6:
@@ -111,16 +118,21 @@ class HangmanGame(BaseMode):
                     print("_", end=" ")
 
             print()
-            self.__display_keyboard()
+            self._display_keyboard()
             print()
 
-            guess: str = get_non_empty_letter_range_input("Enter your guess letter: ", string.ascii_lowercase, False)
+            guess: str = get_non_empty_char_range_input("Enter your guess letter (type 0 to quit): ", string.ascii_lowercase + "0", False)
+
+            if guess == "0":
+                self.is_running = False
+                break
 
             self.current_guess.append(guess)
 
             if guess not in self.current_word:
                 self.guess_count += 1
 
+            save_state(self._save_object(), self.mode_name)
             clear_console()
 
         if not self.is_running:
@@ -128,11 +140,11 @@ class HangmanGame(BaseMode):
                 self.start()
             yes_no_query_invoker("Would you like to play again?", on_start, self.on_exit)
 
-    def __display_hangman(self) -> None:
+    def _display_hangman(self) -> None:
         for line in self.hangman[self.guess_count]:
             print(line)
 
-    def __display_keyboard(self):
+    def _display_keyboard(self):
         for row in self.keyboard:
             for letter in row:
                 if letter.lower() in self.current_guess:
@@ -140,6 +152,23 @@ class HangmanGame(BaseMode):
                 else:
                     print(letter, end=" | ")
             print()
+    
+    def _save_object(self) -> dict:
+        return {
+            "current_word": self.current_word,
+            "current_guess": self.current_guess,
+            "guess_count": self.guess_count,
+        }
+
+    def _load_object(self) -> bool:
+        load = load_state(self.mode_name)
+        if load[0]:
+            self.current_word = load[1]["current_word"]
+            self.current_guess = load[1]["current_guess"]
+            self.guess_count = load[1]["guess_count"]
+            return True
+        else:
+            return False
 
     def instructions(self) -> None:
         print(f"\tHi {self.player_name}. Welcome to Hangman Game!")

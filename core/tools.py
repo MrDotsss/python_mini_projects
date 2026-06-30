@@ -113,7 +113,7 @@ def get_non_empty_word_range_input(query: str, word_range: Iterable[str], case_s
         else:
             return user_input
 
-def get_non_empty_letter_range_input(query: str, word_range: Iterable[str], case_sensitive: bool = False) -> str:
+def get_non_empty_char_range_input(query: str, word_range: Iterable[str], case_sensitive: bool = False) -> str:
     if not case_sensitive:
         valid_words: set[str] = {item.lower() for item in word_range}
         display_words: list[str] = list(word_range)
@@ -126,8 +126,8 @@ def get_non_empty_letter_range_input(query: str, word_range: Iterable[str], case
         user_input: str = input(query)
         check_input = user_input if case_sensitive else user_input.lower()
 
-        if len(user_input) > 1 or not check_input.strip() or check_input.isnumeric():
-            print("You entered an empty or word value. Try again.")
+        if len(user_input) > 1 or not check_input.strip():
+            print("You entered an empty or non single value value. Try again.")
         elif check_input not in valid_words:
             print("Invalid Input, must be: ")
         else:

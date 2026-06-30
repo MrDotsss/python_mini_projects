@@ -22,6 +22,7 @@ class ConcessionStand(BaseMode):
         }
         self.cart: dict[int, ShoppingItem] | None = None
 
+    @property
     def mode_name(self) -> str:
         return "Concession Stand"
 
@@ -30,12 +31,12 @@ class ConcessionStand(BaseMode):
         self.cart = {}
         clear_console()
         self.instructions()
-        self.__main_menu()
+        self._main_menu()
 
     def build(self) -> None:
         pass
 
-    def __main_menu(self) -> None:
+    def _main_menu(self) -> None:
         menu_length: int = len(self.menu) + 1 if len(self.cart) != 0 else len(self.menu)
 
         print(f"{"-" * 10} MENU {"-" * 10}")
@@ -43,7 +44,7 @@ class ConcessionStand(BaseMode):
             print(f"{key:^3}: {value[0]:^20} | ${value[1]:,.2f}")
 
         if len(self.cart) != 0:
-            print(f"\n{menu_length:^3}: {"Checkout":^20} | ${self.__get_total_amount():,.2f}")
+            print(f"\n{menu_length:^3}: {"Checkout":^20} | ${self._get_total_amount():,.2f}")
 
         print(f"\n{menu_length + 1:^3}: {"Exit":^20}")
 
@@ -55,7 +56,7 @@ class ConcessionStand(BaseMode):
         choice: int = get_non_empty_int_range_input("Choice (number): ", 1, menu_length + 1)
 
         if choice == menu_length:
-            self.__checkout()
+            self._checkout()
             return
         elif choice == menu_length + 1:
             self.on_exit()
@@ -77,12 +78,12 @@ class ConcessionStand(BaseMode):
             self.cart[choice] = item
             print(item)
 
-        yes_no_query_invoker("\nCheckout? ", self.__checkout, self.__main_menu)
+        yes_no_query_invoker("\nCheckout? ", self._checkout, self._main_menu)
 
-    def __checkout(self) -> None:
+    def _checkout(self) -> None:
         clear_console()
 
-        total: float = self.__get_total_amount()
+        total: float = self._get_total_amount()
 
         print(f"{"-" * 10} CART {"-" * 10}")
         for item in self.cart.values():
@@ -96,15 +97,15 @@ class ConcessionStand(BaseMode):
             self.cart.clear()
             time.sleep(3)
             clear_console()
-            self.__main_menu()
+            self._main_menu()
 
         def on_cancel() -> None:
             clear_console()
-            self.__main_menu()
+            self._main_menu()
 
         yes_no_query_invoker("Proceed to checkout?", on_checkout, on_cancel)
 
-    def __get_total_amount(self) -> float:
+    def _get_total_amount(self) -> float:
         return sum(item.total_price() for item in self.cart.values())
 
     def instructions(self) -> None:

@@ -45,6 +45,7 @@ class SimpleConverter(BaseMode):
         self.converting_unit: str = ""
         self.category_dict: dict | None = None
 
+    @property
     def mode_name(self) -> str:
         return "Simple Converter"
 
@@ -90,7 +91,7 @@ class SimpleConverter(BaseMode):
         is_temp: bool = self.current_category.value == "temperature"
 
         if is_temp:
-            temp: float = self.__convert_to_temp()
+            temp: float = self._convert_to_temp()
             print(f"Temperature: {self.current_value}{self.converting_unit} => {temp:,.2f}{self.converting_unit}")
         else:
             base_value: float = self.current_value * self.category_dict[self.converting_unit]
@@ -101,7 +102,7 @@ class SimpleConverter(BaseMode):
 
         yes_no_query_invoker("Would you like to convert again?", on_start, self.on_exit)
 
-    def __convert_to_temp(self) -> float:
+    def _convert_to_temp(self) -> float:
         temp_dict: dict = CONVERSIONS[self.current_category.value].copy()
 
         if self.converting_unit not in temp_dict:

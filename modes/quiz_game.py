@@ -27,19 +27,20 @@ class QuizGame(BaseMode):
         self.answers: tuple = ("B", "C", "B", "D", "A")
 
 
+    @property
     def mode_name(self) -> str:
         return "Quiz Game"
 
     def start(self) -> None:
         
-        self.__reset()
+        self._reset()
 
         clear_console()
         self.instructions()
         input("Press ENTER to continue...")
         self.build()
 
-    def __reset(self) -> None:
+    def _reset(self) -> None:
         self.current_score = 0
         self.guesses.clear()
         self.question_index = 0
@@ -70,10 +71,10 @@ class QuizGame(BaseMode):
 
         clear_console()
         input("Well done! Press ENTER to review your results...")
-        self.__review_scores()
+        self._review_scores()
 
 
-    def __review_scores(self):
+    def _review_scores(self):
         clear_console()
         for index, question in enumerate(self.questions):
             correct_answer: str = self.answers[index]
@@ -90,7 +91,7 @@ class QuizGame(BaseMode):
             print()
 
         print("="*40)
-        print(f"SCORE: {self.current_score}/{len(self.questions)} | {self.__get_score_comment()}")
+        print(f"SCORE: {self.current_score}/{len(self.questions)} | {self._get_score_comment()}")
 
         print()
         time.sleep(1)
@@ -100,7 +101,7 @@ class QuizGame(BaseMode):
 
         yes_no_query_invoker("Would you like to try again?", on_start, self.on_exit)
 
-    def __get_score_comment(self) -> str:
+    def _get_score_comment(self) -> str:
         if self.current_score == 5:
             return "PERFECTION!"
         elif self.current_score >= 3:

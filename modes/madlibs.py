@@ -43,13 +43,14 @@ class MadlibsGame(BaseMode):
         self.emotion_1: str = ""
         self.funny_title_1: str = ""
 
+    @property
     def mode_name(self) -> str:
         return "Madlibs Game"
     
     def start(self) -> None:
         
         self.instructions()
-        self.__get_inputs()
+        self._get_inputs()
         clear_console()
         self.build()
 
@@ -63,7 +64,7 @@ class MadlibsGame(BaseMode):
         input("Press ENTER to continue...")
 
     
-    def __get_inputs(self) -> None:
+    def _get_inputs(self) -> None:
         self.adjective_1: str = get_non_empty_word_input("Enter Adjective (HINT: feeling): ")
         self.noun_1: str = get_non_empty_word_input("Enter Noun (HINT: item): ")
         self.animal_1: str = get_non_empty_word_input("Enter Animal: ")

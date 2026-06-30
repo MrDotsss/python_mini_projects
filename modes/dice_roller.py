@@ -44,6 +44,7 @@ class LuckDiceRoller(BaseMode):
         self.computer_roll: list[int] = []
         self.max_dice: int = 3
 
+    @property
     def mode_name(self) -> str:
         return "Lucky Dice Roller"
 
@@ -65,10 +66,10 @@ class LuckDiceRoller(BaseMode):
             self.player_roll.append(random.randint(1, 6))
             self.computer_roll.append(random.randint(1, 6))
 
-        self.__roll_dice()
+        self._roll_dice()
 
-    def __roll_dice(self) -> None:
-        self.__simulate_dice_roll()
+    def _roll_dice(self) -> None:
+        self._simulate_dice_roll()
 
         print("Player:")
         for line in range(5):
@@ -109,7 +110,7 @@ class LuckDiceRoller(BaseMode):
 
         yes_no_query_invoker("Play again?", on_start, self.on_exit)
 
-    def __simulate_dice_roll(self) -> None:
+    def _simulate_dice_roll(self) -> None:
         for i in range(random.randint(10, 20)):
             print("ROLLING")
             rand_die_one: list = []

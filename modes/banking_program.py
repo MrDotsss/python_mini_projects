@@ -1,9 +1,10 @@
 from __future__ import annotations
 import time
-import datetime
+from datetime import datetime
 from enum import Enum
 
 from core.mode_manager import ModeManager, BaseMode
+from core.save_manager import save_state, load_state, save_exists, clear_save
 from core.tools import clear_console, get_non_empty_pass_input, get_non_empty_int_range_input, get_non_empty_float_input, display_loading_seq
 
 #it stores in memory, for now
@@ -17,18 +18,25 @@ class States(Enum):
     HISTORY = "History"
 
 class TransactionHistory:
-    def __init__(self, transaction_type: States, amount: float) -> None:
-        self.transaction_type: States = transaction_type
+    def __init__(self, transaction_type: str, amount: float, date: datetime) -> None:
+        self.transaction_type: str = transaction_type
         self.amount: float = amount
-        self.date: datetime.datetime = datetime.datetime.now()
+        self.date: datetime = date
 
     def __str__(self) -> str:
-        return f"Date: {self.date:%A, %B %d, %Y, %I:%M %p}\nTransaction Type: {self.transaction_type.value}\nAmount: {self.__get_amount_by_type()}"
+        return f"Date: {self.date:%A, %B %d, %Y, %I:%M %p}\nTransaction Type: {self.transaction_type}\nAmount: {self._get_amount_by_type()}"
 
-    def __get_amount_by_type(self) -> str:
-        if self.transaction_type == States.DEPOSIT:
+    def __dict__(self) -> dict:
+        return {
+            "transaction_type": self.transaction_type,
+            "amount": self.amount,
+            "date": self.date.isoformat(),
+        }
+
+    def _get_amount_by_type(self) -> str:
+        if self.transaction_type == States.DEPOSIT.value:
             return f"+${self.amount:,.2f}"
-        elif self.transaction_type == States.WITHDRAW:
+        elif self.transaction_type == States.WITHDRAW.value:
             return f"-${self.amount:,.2f}"
         else:
             return f"${self.amount:,.2f}"
@@ -43,11 +51,21 @@ class BankingProgram(BaseMode):
         self.balance: float = 0
         self.pin: str = ""
 
+    @property
     def mode_name(self) -> str:
         return "BANK PROGRAM - ATM"
 
+    def reset(self) -> None:
+        self.is_authenticated = False
+        self.current_state: States = States.LOGIN
+        self.transaction_history: list[TransactionHistory] = []
+        self.balance: float = 0
+        self.pin: str = ""
+
     def start(self) -> None:
-        
+        if save_exists(self.mode_name):
+            self._load_object()
+
         self.is_authenticated = False
         clear_console()
         self.instructions()
@@ -57,17 +75,17 @@ class BankingProgram(BaseMode):
         while self.is_running:
             match self.current_state:
                 case States.LOGIN:
-                    self.__login()
+                    self._login()
                 case States.MENU:
-                    self.__menu()
+                    self._menu()
                 case States.BALANCE:
-                    self.__balance()
+                    self._balance()
                 case States.WITHDRAW:
-                    self.__withdraw()
+                    self._withdraw()
                 case States.DEPOSIT:
-                    self.__deposit()
+                    self._deposit()
                 case States.HISTORY:
-                    self.__history()
+                    self._history()
 
         if not self.is_running:
             self.on_exit()
@@ -91,7 +109,7 @@ class BankingProgram(BaseMode):
         self.current_state = States.LOGIN
         self.mode_manager.exit_mode()
 
-    def __login(self) -> None:
+    def _login(self) -> None:
         clear_console()
         if self.is_authenticated:
             self.current_state = States.MENU
@@ -121,8 +139,9 @@ class BankingProgram(BaseMode):
                 print(f"Hello! {self.player_name}")
                 print("Returning to main menu...")
                 time.sleep(1)
-                self.transaction_history.append(TransactionHistory(States.LOGIN, self.balance))
+                self.transaction_history.append(TransactionHistory(States.LOGIN.value, self.balance, datetime.now()))
                 self.is_authenticated = True
+                save_state(self._save_object(), self.mode_name)
                 self.current_state = States.MENU
             else:
                 max_tries: int = 3
@@ -136,18 +155,24 @@ class BankingProgram(BaseMode):
                     max_tries -= 1
 
                 if max_tries <= 0:
-                    print("YOU'VE REACHED MAXIMUM TRIES. YOUR ACCOUNT WILL BE ON HOLD")
+                    print("YOU'VE REACHED MAXIMUM TRIES. YOUR ACCOUNT WILL BE REVOKED AND DELETED")
+
+                    if save_exists(self.mode_name):
+                        clear_save(self.mode_name)
+                    self.reset()
+
                     time.sleep(1)
                     self.is_running = False
                     return
 
                 print(f"Welcome back! {self.player_name}")
-                self.transaction_history.append(TransactionHistory(States.LOGIN, self.balance))
+                self.transaction_history.append(TransactionHistory(States.LOGIN.value, self.balance, datetime.now()))
+                save_state(self._save_object(), self.mode_name)
                 self.is_authenticated = True
                 time.sleep(1)
                 self.current_state = States.MENU
 
-    def __menu(self) -> None:
+    def _menu(self) -> None:
         clear_console()
         if not self.is_authenticated:
             self.current_state = States.LOGIN
@@ -173,7 +198,7 @@ class BankingProgram(BaseMode):
             case 5:
                 self.is_running = False
 
-    def __balance(self) -> None:
+    def _balance(self) -> None:
         clear_console()
         if not self.is_authenticated:
             self.current_state = States.LOGIN
@@ -184,13 +209,14 @@ class BankingProgram(BaseMode):
         print("Your balance is:")
         print(f"\t${self.balance:,.2f}")
         print("=" * 50)
-        self.transaction_history.append(TransactionHistory(States.BALANCE, self.balance))
+        self.transaction_history.append(TransactionHistory(States.BALANCE.value, self.balance, datetime.now()))
+        save_state(self._save_object(), self.mode_name)
         time.sleep(1)
 
         input("\nPress ENTER to return to main menu.")
         self.current_state = States.MENU
 
-    def __deposit(self) -> None:
+    def _deposit(self) -> None:
         clear_console()
         if not self.is_authenticated:
             self.current_state = States.LOGIN
@@ -222,8 +248,8 @@ class BankingProgram(BaseMode):
         display_loading_seq(f"PROCESSING | +${deposit:,.2f}", ".,.", range(1, 10), 0.1)
 
         self.balance += deposit
-        self.transaction_history.append(TransactionHistory(States.DEPOSIT, deposit))
-
+        self.transaction_history.append(TransactionHistory(States.DEPOSIT.value, deposit, datetime.now()))
+        save_state(self._save_object(), self.mode_name)
         print("DEPOSIT COMPLETE\n")
         print("Your balance is:")
         print(f"\t${self.balance:,.2f}")
@@ -233,7 +259,7 @@ class BankingProgram(BaseMode):
         input("Press ENTER to return to main menu.")
         self.current_state = States.MENU
 
-    def __withdraw(self) -> None:
+    def _withdraw(self) -> None:
         clear_console()
         if not self.is_authenticated:
             self.current_state = States.LOGIN
@@ -265,8 +291,8 @@ class BankingProgram(BaseMode):
         display_loading_seq(f"PROCESSING | -${withdraw:,.2f}", ".,.", range(1, 10), 0.1)
 
         self.balance -= withdraw
-        self.transaction_history.append(TransactionHistory(States.WITHDRAW, withdraw))
-
+        self.transaction_history.append(TransactionHistory(States.WITHDRAW.value, withdraw, datetime.now()))
+        save_state(self._save_object(), self.mode_name)
         print("WITHDRAW COMPLETE\n")
         print("Your balance is:")
         print(f"\t${self.balance:,.2f}")
@@ -276,7 +302,7 @@ class BankingProgram(BaseMode):
         input("Press ENTER to return to main menu.")
         self.current_state = States.MENU
 
-    def __history(self) -> None:
+    def _history(self) -> None:
         clear_console()
         if not self.is_authenticated:
             self.current_state = States.LOGIN
@@ -291,3 +317,24 @@ class BankingProgram(BaseMode):
         time.sleep(1)
         input("Press ENTER to return to main menu.")
         self.current_state = States.MENU
+    
+    def _save_object(self) -> dict:
+        return {
+            "pin": self.pin,
+            "balance": self.balance,
+            "history": [history.__dict__() for history in self.transaction_history],
+        }
+
+    def _load_object(self) -> None:
+        load = load_state(self.mode_name)
+        if load[0]:
+            self.pin = load[1]["pin"]
+            self.balance = load[1]["balance"]
+            for history in load[1]["history"]:
+                self.transaction_history.append(
+                    TransactionHistory(
+                        history["transaction_type"],
+                        history["amount"],
+                        datetime.fromisoformat(history["date"]),
+                    )
+                )

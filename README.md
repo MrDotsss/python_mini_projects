@@ -27,6 +27,19 @@ Provides reusable utility functions for input validation, user prompts, data par
 * Centralizes validation logic
 * Keeps feature modules clean and focused
 
+### `core/save_manager.py`
+
+**Purpose:**
+Provides reusable save and load functionality using JSON files for persisting application data across sessions.
+
+**Benefits:**
+
+* Centralizes save file management
+* Demonstrates file I/O and JSON serialization
+* Reinforces exception handling for filesystem operations
+* Promotes reusable persistence across multiple application modes
+
+
 ---
 ## MODES/PROJECTS
 
